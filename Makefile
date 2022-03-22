@@ -6,7 +6,7 @@
 #    By: mriant <mriant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 16:56:48 by mriant            #+#    #+#              #
-#    Updated: 2022/03/21 17:02:48 by mriant           ###   ########.fr        #
+#    Updated: 2022/03/22 10:07:38 by mriant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,3 +23,26 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g
 IFLAGS = -I./includes
+
+${NAME}: ${OBJS}
+	${CC} ${CFLAGS} ${OBJS} -o ${NAME}
+
+build/%.o: srcs/%.c
+	mkdir -p build
+	${CC} ${CFLAGS} -c $< -o $@ ${IFLAGS}
+
+all: ${NAME}
+
+clean:
+	rm -rf ${OBJS}
+	rm -rf ${DEPS}
+	rm -rf build
+
+fclean: clean
+	rm -rf ${NAME}
+
+re: fclean all
+
+.PHONY: all clean fclean re
+
+-include ${DEPS}

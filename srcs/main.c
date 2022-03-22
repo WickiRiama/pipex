@@ -6,7 +6,16 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 16:58:40 by mriant            #+#    #+#             */
-/*   Updated: 2022/03/21 16:58:42 by mriant           ###   ########.fr       */
+/*   Updated: 2022/03/22 12:13:18 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "pipex.h"
+#include <stdio.h>
+
+int	main(int ac, char **av, char**envp)
+{
+	(void)ac;
+	(void)av;
+	printf("%s\n", envp[1]);
+}
