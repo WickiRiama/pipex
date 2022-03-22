@@ -6,7 +6,7 @@
 #    By: mriant <mriant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 16:56:48 by mriant            #+#    #+#              #
-#    Updated: 2022/03/22 15:44:31 by mriant           ###   ########.fr        #
+#    Updated: 2022/03/22 15:52:20 by mriant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,18 +24,18 @@ LIBFT = libft/libft.a
 CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g
-IFLAGS = -I./includes
+IFLAGS = -I./includes -I./libft
 LFLAGS = -L./libft -lft
 
 ${NAME}: ${LIBFT} ${OBJS}
-	${CC} ${CFLAGS} ${OBJS} -c ${NAME} ${LFLAGS}
+	${CC} ${CFLAGS} ${OBJS} -o ${NAME} ${LFLAGS}
 
 ${LIBFT}:
 	make -C libft
 
-build/%.o: srcs/%.C
+build/%.o: srcs/%.c
 	mkdir -p build
-	${CC} ${CFLAGS} -c $@ -o $< ${IFLAGS}
+	${CC} ${CFLAGS} -c $< -o $@ ${IFLAGS}
 
 .PHONY: all
 all: ${NAME}
