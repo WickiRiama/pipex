@@ -6,7 +6,13 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 16:58:40 by mriant            #+#    #+#             */
-/*   Updated: 2022/03/21 16:58:42 by mriant           ###   ########.fr       */
+/*   Updated: 2022/03/22 15:34:43 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "pipex.h"
+
+int	main(int ac, char ** av, char ** aenv)
+{
+	
+}
