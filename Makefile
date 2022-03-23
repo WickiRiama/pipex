@@ -6,7 +6,7 @@
 #    By: mriant <mriant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 16:56:48 by mriant            #+#    #+#              #
-#    Updated: 2022/03/22 17:14:34 by mriant           ###   ########.fr        #
+#    Updated: 2022/03/23 10:48:50 by mriant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LIBFT = libft/libft.a
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -MMD
 IFLAGS = -I./includes -I./libft
 LFLAGS = -L./libft -lft
 
