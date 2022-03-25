@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/21 16:58:40 by mriant            #+#    #+#             */
-/*   Updated: 2022/03/24 18:05:25 by mriant           ###   ########.fr       */
+/*   Updated: 2022/03/25 12:16:13 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 #include "pipex.h"
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <stdio.h>
 
 int	ft_do_cmd1(char **cmd, int fd_in, int fd_pipe[2], char **aenv)
 {
 	int	fd_stdin;
 	int	fd_stdout;
 
+	close (fd_pipe[0]);
 	fd_stdin = dup2(fd_in, 0);
 	close(fd_in);
 	fd_stdout = dup2(fd_pipe[1], 1);
@@ -37,9 +39,9 @@ int	ft_do_cmd2(char **cmd, int fd_out, int fd_pipe[2], char **aenv)
 	int	fd_stdin;
 	int	fd_stdout;
 
+	close(fd_pipe[1]);
 	fd_stdin = dup2(fd_pipe[0], 0);
 	close(fd_pipe[0]);
-	ft_printf("ici\n");
 	fd_stdout = dup2(fd_out, 1);
 	close(fd_out);
 	if (fd_stdin == -1 || fd_stdout == -1)
@@ -73,7 +75,7 @@ int	main(int ac, char **av, char **aenv)
 	fd_f2 = open(av[4], O_CREAT | O_TRUNC | O_WRONLY, 00700);
 	if (fd_f1 == -1 || fd_f2 == -1 || pipe(fd_pipe) == -1)
 	{
-		ft_fprintf(2, "Error\nCan't open file.\n");
+		perror("Error\n");
 		ft_clean_array(cmd1);
 		ft_clean_array(cmd2);
 		return (1);
@@ -85,8 +87,8 @@ int	main(int ac, char **av, char **aenv)
 			exit(1);
 		exit(0);
 	}
-	waitpid(pid_child1, 0, 0);
 	close (fd_pipe[1]);
+	waitpid(pid_child1, 0, 0);
 	pid_child2 = fork();
 	if (pid_child2 == 0)
 	{
@@ -94,11 +96,9 @@ int	main(int ac, char **av, char **aenv)
 			exit(1);
 		exit(0);
 	}
-
-	waitpid(pid_child2, 0, 0);
 	close (fd_pipe[0]);
+	waitpid(pid_child2, 0, 0);
 	ft_clean_array(cmd1);
 	ft_clean_array(cmd2);
 	return (0);
-	
 }
