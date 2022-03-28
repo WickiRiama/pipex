@@ -6,7 +6,7 @@
 #    By: mriant <mriant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 16:56:48 by mriant            #+#    #+#              #
-#    Updated: 2022/03/24 12:01:09 by mriant           ###   ########.fr        #
+#    Updated: 2022/03/28 11:57:33 by mriant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 
 SRCS = ${addprefix srcs/, \
 	main.c \
-	parse_cmd.c \
+	parsing.c \
 	utils.c}
 
 OBJS = ${patsubst srcs/%.c, build/%.o, ${SRCS}}
