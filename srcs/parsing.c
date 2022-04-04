@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 11:40:02 by mriant            #+#    #+#             */
-/*   Updated: 2022/03/30 13:58:35 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:11:15 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,23 @@ void	ft_parse_cmd(char **cmd[2], char **av, char **aenv)
 		ft_fprintf(2, "Can't find PATH\n");
 	cmd[0] = ft_split(av[2], ' ');
 	if (!cmd[0])
+	{
+		ft_clean_array(paths);
 		ft_error("Split error", cmd, NULL, NULL);
+	}
 	ft_get_cmdpath(cmd[0], paths);
 	cmd[1] = ft_split(av[3], ' ');
 	if (!cmd[1])
+	{
+		ft_clean_array(paths);
 		ft_error("Split error", cmd, NULL, NULL);
+	}
 	ft_get_cmdpath(cmd[1], paths);
 	ft_clean_array(paths);
 }
 
-void	ft_parse_file(char **cmd[2], int fd_file[2], char **av)
+void	ft_parse_file(int fd_file[2], char **av)
 {
-	(void)cmd;
 	fd_file[0] = open(av[1], O_RDONLY);
 	if (fd_file[0] == -1)
 		perror(av[1]);
@@ -91,5 +96,5 @@ void	ft_parse_file(char **cmd[2], int fd_file[2], char **av)
 void	ft_parse_all(char **cmd[2], int fd_file[2], char **av, char **aenv)
 {
 	ft_parse_cmd(cmd, av, aenv);
-	ft_parse_file(cmd, fd_file, av);
+	ft_parse_file(fd_file, av);
 }
