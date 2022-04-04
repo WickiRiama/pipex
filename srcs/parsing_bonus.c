@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/04 10:34:58 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:18:29 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,37 +59,37 @@ void	ft_get_cmdpath(char **cmd, char **paths)
 	return ;
 }
 
-void	ft_parse_cmd(char **cmd[2], char **av, char **aenv)
+void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 {
 	char	**paths;
+	int		i;
 
 	paths = ft_get_path(aenv);
 	if (!paths)
 		ft_fprintf(2, "Can't find PATH\n");
-	cmd[0] = ft_split(av[2], ' ');
-	if (!cmd[0])
-		ft_error("Split error", cmd, NULL, NULL);
-	ft_get_cmdpath(cmd[0], paths);
-	cmd[1] = ft_split(av[3], ' ');
-	if (!cmd[1])
-		ft_error("Split error", cmd, NULL, NULL);
-	ft_get_cmdpath(cmd[1], paths);
+	i = 0;
+	while (i < nb_cmd)
+	{
+		cmd[i] = ft_split(av[i + 2], ' ');
+		if (!cmd[i])
+		{
+			ft_clean_array(paths);
+			ft_error("Split error", cmd, NULL, 0);
+		}
+		ft_get_cmdpath(cmd[i], paths);
+		i++;
+	}
+	cmd[i] = NULL;
 	ft_clean_array(paths);
 }
 
-void	ft_parse_file(char **cmd[2], int fd_file[2], char **av)
+void	ft_parse_file(int *fd, int fd_len, char **av)
 {
-	(void)cmd;
 	fd_file[0] = open(av[1], O_RDONLY);
 	if (fd_file[0] == -1)
 		perror(av[1]);
-	fd_file[1] = open(av[4], O_CREAT | O_TRUNC | O_WRONLY, 00700);
-	if (fd_file[1] == -1)
-		perror(av[4]);
-}
-
-void	ft_parse_all(char **cmd[2], int fd_file[2], char **av, char **aenv)
-{
-	ft_parse_cmd(cmd, av, aenv);
-	ft_parse_file(cmd, fd_file, av);
+	fd_file[fd_len - 1] = open(av[(fd_len / 2) + 2],
+			O_CREAT | O_TRUNC | O_WRONLY, 00700);
+	if (fd_file[fd_len - 1] == -1)
+		perror(av[(fd_len / 2) + 2]);
 }

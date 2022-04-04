@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:35:16 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/04 10:35:19 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/04 15:19:20 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,39 @@ void	ft_clean_array(char	**s_array)
 	free(s_array);
 }
 
-void	ft_error(char *error, char **cmd[2], int fd_file[2], int fd_pipe[2])
+void	ft_error(char *error, char ***cmd, int *fd, int fd_len)
 {
+	int	i;
+
 	if (error && ft_strcmp(error, "nb_ac") == 0)
-		ft_fprintf(2, "Error\nPipex takes 4 arguments file1 cmd1 cmd2 file2.\n");
+		ft_fprintf(2,
+			"Error\nPipex takes at least 4 arguments file1 cmd1 cmd2 file2.\n");
 	else if (error)
 		perror(error);
-	if (cmd[0])
+	i = 0;
+	while (cmd && cmd[i])
+	{
 		ft_clean_array(cmd[0]);
-	if (cmd[1])
-		ft_clean_array(cmd[1]);
-	if (fd_file)
-	{
-		if (fd_file[0] != -1)
-			close(fd_file[0]);
-		if (fd_file[1] != -1)
-			close(fd_file[1]);
+		i++;
 	}
-	if (fd_pipe)
+	i = 0;
+	while (fd && i < fd_len)
 	{
-		if (fd_pipe[0] != -1)
-			close(fd_pipe[0]);
-		if (fd_pipe[1] != -1)
-			close(fd_pipe[1]);
+		if (fd[i] >= 0)
+			close(fd[i]);
+		i++;
 	}
 	exit(1);
+}
+
+void	ft_init_fd(int *fd, int nb_fd)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb_fd)
+	{
+		fd[i] = -2;
+		i++;
+	}
 }
