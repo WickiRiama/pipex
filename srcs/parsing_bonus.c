@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/05 11:15:25 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/05 15:46:54 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,14 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 		cmd[i] = ft_split(av[i + 2], ' ');
 		if (!cmd[i])
 		{
-			ft_clean_array(paths);
+			ft_clean_array(&paths);
 			ft_error("Split error", cmd, NULL, 0);
 		}
 		ft_get_cmdpath(cmd[i], paths);
 		i++;
 	}
 	cmd[i] = NULL;
-	ft_clean_array(paths);
+	ft_clean_array(&paths);
 }
 
 void	ft_parse_file(int *fd, int fd_len, char **av)
