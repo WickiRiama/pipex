@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:22:12 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/05 11:42:50 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/05 14:52:02 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@ void	ft_do_cmd(char ***cmd, int *fd, int i, char **aenv)
 	fd_stdout = dup2(fd[i * 2 + 1], 1);
 	close(fd[(i - 1) * 2 + 2]);
 	close(fd[i * 2 + 1]);
+	while (nb_cmd > 0)
+	{
+		if (nb_cmd - 1 != i)
+		{
+			ft_clean_array(cmd[nb_cmd - 1]);
+			cmd[nb_cmd - 1] = NULL;
+		}
+		nb_cmd--;
+	}
+	free(fd);
+	fd = NULL;
 	if (fd_stdin == -1 || fd_stdout == -1)
 		ft_error(NULL, cmd, fd, nb_cmd * 2);
 	if (execve(cmd[i][0], cmd[i], aenv))
@@ -42,6 +53,7 @@ int	ft_do_fork(char **cmd[2], int *fd, int nb_cmd, char **aenv)
 	pid_t	pid_child;
 	int		fd_pipe[2];
 	int		status;
+	int		result;
 	int		i;
 
 	i = 0;
@@ -63,8 +75,14 @@ int	ft_do_fork(char **cmd[2], int *fd, int nb_cmd, char **aenv)
 		close(fd[i * 2 + 1]);
 		i++;
 	}
-	waitpid(pid_child, &status, 0);
-	return (WEXITSTATUS(status));
+	i = wait(&status);
+	while (i > 0)
+	{
+		if (i == pid_child)
+			result = status;
+		i = wait(&status);
+	}
+	return (WEXITSTATUS(result));
 }
 
 int	main(int ac, char **av, char **aenv)
@@ -80,7 +98,7 @@ int	main(int ac, char **av, char **aenv)
 	cmd = ft_calloc(sizeof(char**), (nb_cmd + 1));
 	if (!cmd)
 		ft_error("malloc", NULL, NULL, 0);
-	ft_parse_cmd(cmd, av, aenv, ac - 2);
+	ft_parse_cmd(cmd, av, aenv, ac - 3);
 	fd = malloc(sizeof(int) * nb_cmd * 2);
 	ft_init_fd(fd, nb_cmd * 2);
 	if (!fd)
