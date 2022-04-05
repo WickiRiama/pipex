@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/04 15:18:29 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/05 11:15:25 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 
 void	ft_parse_file(int *fd, int fd_len, char **av)
 {
-	fd_file[0] = open(av[1], O_RDONLY);
-	if (fd_file[0] == -1)
+	fd[0] = open(av[1], O_RDONLY);
+	if (fd[0] == -1)
 		perror(av[1]);
-	fd_file[fd_len - 1] = open(av[(fd_len / 2) + 2],
+	fd[fd_len - 1] = open(av[(fd_len / 2) + 2],
 			O_CREAT | O_TRUNC | O_WRONLY, 00700);
-	if (fd_file[fd_len - 1] == -1)
+	if (fd[fd_len - 1] == -1)
 		perror(av[(fd_len / 2) + 2]);
 }

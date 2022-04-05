@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:35:16 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/04 15:19:20 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/05 11:05:01 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	ft_error(char *error, char ***cmd, int *fd, int fd_len)
 		ft_clean_array(cmd[0]);
 		i++;
 	}
+	free(cmd);
 	i = 0;
 	while (fd && i < fd_len)
 	{
@@ -52,6 +53,7 @@ void	ft_error(char *error, char ***cmd, int *fd, int fd_len)
 			close(fd[i]);
 		i++;
 	}
+	free(fd);
 	exit(1);
 }
 
@@ -65,4 +67,16 @@ void	ft_init_fd(int *fd, int nb_fd)
 		fd[i] = -2;
 		i++;
 	}
+}
+
+int	ft_tablen(char ***tab)
+{
+	int	i;
+
+	if (!tab)
+		return (0);
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
 }
