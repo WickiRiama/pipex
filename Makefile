@@ -6,7 +6,7 @@
 #    By: mriant <mriant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 16:56:48 by mriant            #+#    #+#              #
-#    Updated: 2022/04/04 10:40:34 by mriant           ###   ########.fr        #
+#    Updated: 2022/04/06 11:56:46 by mriant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,11 @@ SRCS = ${addprefix srcs/, \
 	main.c \
 	parsing.c \
 	utils.c}
-BONUS_SRCS = ${addprefix srcs/, \
-	main_bonus.c \
-	parsing_bonus.c \
-	utils_bonus.c}
+BONUS_SRCS = $(addprefix srcs/, \
+		main_bonus.c \
+		parsing_bonus.c \
+		utils_bonus.c)\
+	$(addprefix Get_next_line/, get_next_line.c get_next_line_utils.c)
 
 OBJS = ${patsubst srcs/%.c, build/%.o, ${SRCS}}
 BONUS_OBJS = ${patsubst srcs/%.c, build/%.o, ${BONUS_SRCS}}
@@ -34,7 +35,7 @@ LIBFT = libft/libft.a
 CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g -MMD
-IFLAGS = -I./includes -I./libft
+IFLAGS = -I./includes -I./libft -I./Get_next_line
 LFLAGS = -L./libft -lft
 
 ${NAME}: ${LIBFT} ${OBJS}
@@ -44,9 +45,13 @@ ${LIBFT}:
 	make -C libft
 
 ${BONUS_NAME}: ${LIBFT} ${BONUS_OBJS}
+	echo ${BONUS_SRCS}
 	${CC} ${CFLAGS} ${BONUS_OBJS} -o ${BONUS_NAME} ${LFLAGS}
 
 build/%.o: srcs/%.c
+	mkdir -p build
+	${CC} ${CFLAGS} -c $< -o $@ ${IFLAGS}
+build/%.o: Get_next_line/%.c
 	mkdir -p build
 	${CC} ${CFLAGS} -c $< -o $@ ${IFLAGS}
 

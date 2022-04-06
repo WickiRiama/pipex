@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:21 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/05 16:10:16 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/06 10:43:54 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_clean_array(char	***s_array);
 void	ft_error(char *error, char ***cmd, int *fd, int fd_len);
 void	ft_init_fd(int *fd, int nb_fd);
 void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd);
-void	ft_parse_file(int *fd, int fd_len, char **av);
+void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc);
 int		ft_tablen(char ***tab);
 
 #endif
