@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/07 16:19:31 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:50:16 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,30 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 	ft_clean_array(&paths);
 }
 
-void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
+void	ft_parse_here(int *fd, char **av)
 {
 	char	*str;
+	char	*delim;
 
+	fd[0] = open("temp_here_doc.txt",
+			O_CREAT | O_TRUNC | O_WRONLY, 00700);
+	str = get_next_line(0);
+	delim = ft_strjoin(av[2], "\n", "");
+	while (ft_strcmp(str, delim) != 0)
+	{
+		ft_fprintf(fd[0], "%s", str);
+		free(str);
+		str = get_next_line(0);
+	}
+	free(str);
+	free(delim);
+	close(fd[0]);
+	fd[0] = open("temp_here_doc.txt", O_RDONLY);
+	unlink("temp_here_doc.txt");
+}
+
+void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
+{
 	if (here_doc == 0)
 	{
 		fd[0] = open(av[1], O_RDONLY);
@@ -100,17 +120,7 @@ void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
 	}
 	else
 	{
-		fd[0] = open("temp_here_doc.txt",
-				O_CREAT | O_TRUNC | O_WRONLY, 00700);
-		str = get_next_line(0);
-		while (ft_strcmp(str, ft_strjoin(av[2], "\n", "")) != 0)
-		{
-			ft_fprintf(fd[0], "%s", str);
-			str = get_next_line(0);
-		}
-		close(fd[0]);
-		fd[0] = open("temp_here_doc.txt", O_RDONLY);
-		unlink("temp_here_doc.txt");
+		ft_parse_here(fd, av);
 		fd[fd_len - 1] = open(av[fd_len / 2 + 3],
 				O_CREAT | O_APPEND | O_WRONLY, 00700);
 	}
