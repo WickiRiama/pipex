@@ -6,7 +6,7 @@
 #    By: mriant <mriant@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/21 16:56:48 by mriant            #+#    #+#              #
-#    Updated: 2022/04/06 11:56:46 by mriant           ###   ########.fr        #
+#    Updated: 2022/04/07 09:45:30 by mriant           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,17 +18,21 @@ SRCS = ${addprefix srcs/, \
 	main.c \
 	parsing.c \
 	utils.c}
-BONUS_SRCS = $(addprefix srcs/, \
-		main_bonus.c \
-		parsing_bonus.c \
-		utils_bonus.c)\
-	$(addprefix Get_next_line/, get_next_line.c get_next_line_utils.c)
+BONUS_SRCS = ${addprefix srcs/, \
+	main_bonus.c \
+	parsing_bonus.c \
+	utils_bonus.c}
+GNL_SRCS = ${addprefix Get_next_line/, \
+	get_next_line.c \
+	get_next_line_utils.c}
 
 OBJS = ${patsubst srcs/%.c, build/%.o, ${SRCS}}
 BONUS_OBJS = ${patsubst srcs/%.c, build/%.o, ${BONUS_SRCS}}
+GNL_OBJS = ${patsubst Get_next_line/%.c, build/%.o, ${GNL_SRCS}}
 
 DEPS = ${patsubst srcs/%.c, build/%.d, ${SRCS}}
 BONUS_DEPS = ${patsubst srcs/%.c, build/%.d, ${BONUS_SRCS}}
+GNL_DEPS = ${patsubst Get_next_line/%.c, build/%.d, ${GNL_SRCS}}
 
 LIBFT = libft/libft.a
 
@@ -44,9 +48,8 @@ ${NAME}: ${LIBFT} ${OBJS}
 ${LIBFT}:
 	make -C libft
 
-${BONUS_NAME}: ${LIBFT} ${BONUS_OBJS}
-	echo ${BONUS_SRCS}
-	${CC} ${CFLAGS} ${BONUS_OBJS} -o ${BONUS_NAME} ${LFLAGS}
+${BONUS_NAME}: ${LIBFT} ${BONUS_OBJS} ${GNL_OBJS}
+	${CC} ${CFLAGS} ${BONUS_OBJS} ${GNL_OBJS} -o ${BONUS_NAME} ${LFLAGS}
 
 build/%.o: srcs/%.c
 	mkdir -p build
@@ -63,17 +66,14 @@ all: ${NAME} bonus
 
 .PHONY: clean
 clean:
-	rm -rf ${OBJS}
-	rm -rf ${BONUS_OBJS}
-	rm -rf ${DEPS}
-	rm -rf ${BONUS_DEPS}
+	rm -rf ${OBJS} ${BONUS_OBJS} ${GNL_OBJS}
+	rm -rf ${DEPS} ${BONUS_DEPS} ${GNL_DEPS}
 	rm -rf build
 	make -C libft clean
 
 .PHONY: fclean
 fclean: clean
-	rm -rf ${NAME}
-	rm -rf ${BONUS_NAME}
+	rm -rf ${NAME} ${BONUS_NAME}
 	make -C libft fclean
 
 .PHONY: re
@@ -85,4 +85,4 @@ re_bonus: fclean ${BONUS_NAME}
 .PHONY: re_all
 re_all: fclean all
 
--include ${DEPS} ${BONUS_DEPS}
+-include ${DEPS} ${BONUS_DEPS} ${GNL_DEPS}
