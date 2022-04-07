@@ -6,12 +6,13 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/06 10:53:31 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/07 16:19:31 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "pipex_bonus.h"
+#include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -69,7 +70,7 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 	if (!paths)
 		ft_fprintf(2, "Can't find PATH\n");
 	here_doc = 0;
-	if (ft_strcmp(av[1]) == 0)
+	if (ft_strcmp(av[1], "here_doc") == 0)
 		here_doc = 1;
 	i = 0;
 	while (i < nb_cmd)
@@ -89,6 +90,8 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 
 void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
 {
+	char	*str;
+
 	if (here_doc == 0)
 	{
 		fd[0] = open(av[1], O_RDONLY);
@@ -98,8 +101,17 @@ void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
 	else
 	{
 		fd[0] = open("temp_here_doc.txt",
-				O_CREAT | O_TRUNC | O_RDWR, 00700);
-		fd[fd_len - 1] = open(av[(fd_len / 2) + 2],
+				O_CREAT | O_TRUNC | O_WRONLY, 00700);
+		str = get_next_line(0);
+		while (ft_strcmp(str, ft_strjoin(av[2], "\n", "")) != 0)
+		{
+			ft_fprintf(fd[0], "%s", str);
+			str = get_next_line(0);
+		}
+		close(fd[0]);
+		fd[0] = open("temp_here_doc.txt", O_RDONLY);
+		unlink("temp_here_doc.txt");
+		fd[fd_len - 1] = open(av[fd_len / 2 + 3],
 				O_CREAT | O_APPEND | O_WRONLY, 00700);
 	}
 	if (fd[0] == -1)
