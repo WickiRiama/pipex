@@ -5,13 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/24 11:40:02 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/04 15:11:15 by mriant           ###   ########.fr       */
+/*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
+/*   Updated: 2022/04/08 16:33:09 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "pipex.h"
+#include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -59,42 +60,36 @@ void	ft_get_cmdpath(char **cmd, char **paths)
 	return ;
 }
 
-void	ft_parse_cmd(char **cmd[2], char **av, char **aenv)
+void	ft_parse_cmd(char ***cmd, char **av, char **aenv)
 {
 	char	**paths;
+	int		i;
 
 	paths = ft_get_path(aenv);
 	if (!paths)
 		ft_fprintf(2, "Can't find PATH\n");
-	cmd[0] = ft_split(av[2], ' ');
-	if (!cmd[0])
+	i = 0;
+	while (i < 2)
 	{
-		ft_clean_array(paths);
-		ft_error("Split error", cmd, NULL, NULL);
+		cmd[i] = ft_split(av[i + 2], ' ');
+		if (!cmd[i])
+		{
+			ft_clean_array(&paths);
+			ft_error("Split error", cmd, NULL);
+		}
+		ft_get_cmdpath(cmd[i], paths);
+		i++;
 	}
-	ft_get_cmdpath(cmd[0], paths);
-	cmd[1] = ft_split(av[3], ' ');
-	if (!cmd[1])
-	{
-		ft_clean_array(paths);
-		ft_error("Split error", cmd, NULL, NULL);
-	}
-	ft_get_cmdpath(cmd[1], paths);
-	ft_clean_array(paths);
+	cmd[i] = NULL;
+	ft_clean_array(&paths);
 }
 
-void	ft_parse_file(int fd_file[2], char **av)
+void	ft_parse_file(int *fd, char **av)
 {
-	fd_file[0] = open(av[1], O_RDONLY);
-	if (fd_file[0] == -1)
+	fd[0] = open(av[1], O_RDONLY);
+	fd[3] = open(av[4], O_CREAT | O_TRUNC | O_WRONLY, 00644);
+	if (fd[0] == -1)
 		perror(av[1]);
-	fd_file[1] = open(av[4], O_CREAT | O_TRUNC | O_WRONLY, 00700);
-	if (fd_file[1] == -1)
-		perror(av[4]);
-}
-
-void	ft_parse_all(char **cmd[2], int fd_file[2], char **av, char **aenv)
-{
-	ft_parse_cmd(cmd, av, aenv);
-	ft_parse_file(fd_file, av);
+	if (fd[3] == -1)
+		perror(av[3]);
 }
