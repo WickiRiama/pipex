@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/07 18:19:41 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/08 12:48:42 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	ft_parse_here(int *fd, char **av)
 	char	*delim;
 
 	fd[0] = open("temp_here_doc.txt",
-			O_CREAT | O_TRUNC | O_WRONLY, 00700);
+			O_CREAT | O_TRUNC | O_WRONLY, 00644);
 	str = get_next_line(0);
 	delim = ft_strjoin(av[2], "\n", "");
 	while (ft_strcmp(str, delim) != 0)
@@ -116,13 +116,13 @@ void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
 	{
 		fd[0] = open(av[1], O_RDONLY);
 		fd[fd_len - 1] = open(av[(fd_len / 2) + 2],
-				O_CREAT | O_TRUNC | O_WRONLY, 00700);
+				O_CREAT | O_TRUNC | O_WRONLY, 00644);
 	}
 	else
 	{
 		ft_parse_here(fd, av);
 		fd[fd_len - 1] = open(av[fd_len / 2 + 3],
-				O_CREAT | O_APPEND | O_WRONLY, 00700);
+				O_CREAT | O_APPEND | O_WRONLY, 00644);
 	}
 	if (fd[0] == -1)
 		perror(av[1]);

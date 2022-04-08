@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:22:12 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/07 10:03:10 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/08 12:55:13 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	main(int ac, char **av, char **aenv)
 	here_doc = 0;
 	if (ft_strcmp(av[1], "here_doc") == 0)
 		here_doc = 1;
+	if (here_doc == 1 && ac < 6)
+		ft_error("nb_ac_here", NULL, NULL, 0);
 	nb_cmd = ac - 3 - here_doc;
 	cmd = ft_calloc(sizeof(char **), (nb_cmd + 1));
 	if (!cmd)
