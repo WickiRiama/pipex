@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:22:12 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/08 12:55:13 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/08 17:22:20 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	main(int ac, char **av, char **aenv)
 {
 	char	***cmd;
 	int		*fd;
-	int		nb_cmd;
 	int		status;
 	int		here_doc;
 
@@ -97,17 +96,16 @@ int	main(int ac, char **av, char **aenv)
 		here_doc = 1;
 	if (here_doc == 1 && ac < 6)
 		ft_error("nb_ac_here", NULL, NULL, 0);
-	nb_cmd = ac - 3 - here_doc;
-	cmd = ft_calloc(sizeof(char **), (nb_cmd + 1));
+	cmd = ft_calloc(sizeof(char **), ((ac - 3 - here_doc) + 1));
 	if (!cmd)
 		ft_error("malloc", NULL, NULL, 0);
-	ft_parse_cmd(cmd, av, aenv, nb_cmd);
-	fd = malloc(sizeof(int) * nb_cmd * 2);
-	ft_init_fd(fd, nb_cmd * 2);
+	ft_parse_cmd(cmd, av, aenv, (ac - 3 - here_doc));
+	fd = malloc(sizeof(int) * (ac - 3 - here_doc) * 2);
+	ft_init_fd(fd, (ac - 3 - here_doc) * 2);
 	if (!fd)
 		ft_error("malloc", cmd, NULL, 0);
-	ft_parse_file(fd, nb_cmd * 2, av, here_doc);
-	status = ft_do_fork(cmd, fd, nb_cmd, aenv);
-	ft_clean_all(cmd, fd, nb_cmd * 2);
+	ft_parse_file(fd, (ac - 3 - here_doc) * 2, av, here_doc);
+	status = ft_do_fork(cmd, fd, (ac - 3 - here_doc), aenv);
+	ft_clean_all(cmd, fd, (ac - 3 - here_doc) * 2);
 	return (status);
 }
