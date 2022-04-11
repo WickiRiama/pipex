@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:35:16 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/08 13:02:38 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/11 09:46:39 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_error(char *error, char ***cmd, int *fd, int fd_len)
 		ft_fprintf(2,
 			"Error\nPipex takes at least 4 arguments file1 cmd1 cmd2 file2.\n");
 	if (error && ft_strcmp(error, "nb_ac_here") == 0)
-		ft_fprintf(2, "Error\n%s%s", 
+		ft_fprintf(2, "Error\n%s%s",
 			"If \"here_doc\" is specified, pipex takes at ",
 			"least 5 arguments here_doc STOP cmd1 cmd2 file2.\n");
 	else if (error)
