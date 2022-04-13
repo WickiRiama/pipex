@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:22:12 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/08 17:22:20 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/13 17:18:39 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,17 @@ void	ft_do_cmd(char ***cmd, int *fd, int i, char **aenv)
 	nb_cmd = ft_tablen(cmd);
 	if (i != nb_cmd - 1)
 	{
-		fd[nb_cmd * 2 - 1] = close(fd[nb_cmd * 2 - 1]) - 2;
-		fd[i * 2 + 2] = close(fd[i * 2 + 2]) - 2;
+		if (fd[nb_cmd * 2 - 1] >= 0)
+			fd[nb_cmd * 2 - 1] = close(fd[nb_cmd * 2 - 1]) - 2;
+		if (fd[i * 2 + 2] >= 0)
+			fd[i * 2 + 2] = close(fd[i * 2 + 2]) - 2;
 	}
 	fd_stdin = dup2(fd[(i - 1) * 2 + 2], 0);
 	fd_stdout = dup2(fd[i * 2 + 1], 1);
-	fd[(i - 1) * 2 + 2] = close(fd[(i - 1) * 2 + 2]) - 2;
-	fd[i * 2 + 1] = close(fd[i * 2 + 1]) - 2;
+	if (fd[(i - 1) * 2 + 2] >= 0)
+		fd[(i - 1) * 2 + 2] = close(fd[(i - 1) * 2 + 2]) - 2;
+	if (fd[i * 2 + 1] >= 0)
+		fd[i * 2 + 1] = close(fd[i * 2 + 1]) - 2;
 	if (fd_stdin == -1 || fd_stdout == -1)
 		ft_error(NULL, cmd, fd, nb_cmd * 2);
 	if (execve(cmd[i][0], cmd[i], aenv))

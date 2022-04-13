@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/13 11:20:55 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/13 17:32:10 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ void	ft_parse_here(int *fd, char **av)
 
 	fd[0] = open("temp_here_doc.txt",
 			O_CREAT | O_TRUNC | O_WRONLY, 00644);
+	if (fd[0] == -1)
+		return ;
 	str = get_next_line(0);
 	delim = ft_strjoin(av[2], "\n", "");
 	while (ft_strcmp(str, delim) != 0)
@@ -129,5 +131,6 @@ void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
 	if (fd[0] == -1)
 		ft_fprintf(2, "%s: %s\n", strerror(errno), av[1]);
 	if (fd[fd_len - 1] == -1)
-		ft_fprintf(2, "%s: %s\n", strerror(errno), av[(fd_len / 2) + 2]);
+		ft_fprintf(2, "%s: %s\n", strerror(errno),
+			av[(fd_len / 2) + 2 + here_doc]);
 }
