@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/11 18:06:37 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/13 11:12:00 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**ft_get_path(char **aenv)
 	return (result);
 }
 
-void	ft_get_cmdpath(char ***all_cmd, char **cmd, char **paths)
+void	ft_get_cmdpath(char ***all_cmd, int *fd, char **cmd, char **paths)
 {
 	int		i;
 	char	*s;
@@ -44,7 +44,7 @@ void	ft_get_cmdpath(char ***all_cmd, char **cmd, char **paths)
 	{
 		s = ft_strjoin(paths[i], cmd[0], "/");
 		if (!s)
-			ft_error("Join error ", all_cmd, NULL);
+			ft_error("Join error ", all_cmd, fd);
 		if (access(s, X_OK) == 0)
 		{
 			free(cmd[0]);
@@ -79,7 +79,7 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int *fd)
 			ft_clean_array(&paths);
 			ft_error("Split error", cmd, fd);
 		}
-		ft_get_cmdpath(cmd, cmd[i], paths);
+		ft_get_cmdpath(cmd, fd, cmd[i], paths);
 		i++;
 	}
 	cmd[i] = NULL;

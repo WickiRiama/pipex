@@ -6,12 +6,14 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:35:16 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/11 09:46:39 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/13 11:17:58 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 #include "libft.h"
 #include "pipex_bonus.h"
 
@@ -61,8 +63,8 @@ void	ft_error(char *error, char ***cmd, int *fd, int fd_len)
 		ft_fprintf(2, "Error\n%s%s",
 			"If \"here_doc\" is specified, pipex takes at ",
 			"least 5 arguments here_doc STOP cmd1 cmd2 file2.\n");
-	else if (error)
-		perror(error);
+	else if (error && error[0])
+		ft_fprintf(2, "%s: %s\n", strerror(errno), error);
 	ft_clean_all(cmd, fd, fd_len);
 	exit(1);
 }

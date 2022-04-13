@@ -6,7 +6,7 @@
 /*   By: mriant <mriant@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:34:56 by mriant            #+#    #+#             */
-/*   Updated: 2022/04/08 12:48:42 by mriant           ###   ########.fr       */
+/*   Updated: 2022/04/13 11:20:55 by mriant           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 char	**ft_get_path(char **aenv)
 {
@@ -32,22 +34,17 @@ char	**ft_get_path(char **aenv)
 	return (result);
 }
 
-void	ft_get_cmdpath(char **cmd, char **paths)
+void	ft_get_cmdpath(char ***all_cmd, char **cmd, char **paths)
 {
 	int		i;
 	char	*s;
 
-	if (!paths)
-		return ;
 	i = 0;
-	while (paths[i])
+	while (paths && paths[i])
 	{
 		s = ft_strjoin(paths[i], cmd[0], "/");
 		if (!s)
-		{
-			perror("Join error ");
-			return ;
-		}
+			ft_error("Join error ", all_cmd, NULL, 0);
 		if (access(s, X_OK) == 0)
 		{
 			free(cmd[0]);
@@ -56,6 +53,11 @@ void	ft_get_cmdpath(char **cmd, char **paths)
 		}
 		free(s);
 		i++;
+	}
+	if (!ft_strchr(cmd[0], '/') || access(cmd[0], X_OK) == -1)
+	{
+		ft_fprintf(2, "%s: %s\n", "command not found", cmd[0]);
+		cmd[0][0] = '\0';
 	}
 	return ;
 }
@@ -81,7 +83,7 @@ void	ft_parse_cmd(char ***cmd, char **av, char **aenv, int nb_cmd)
 			ft_clean_array(&paths);
 			ft_error("Split error", cmd, NULL, 0);
 		}
-		ft_get_cmdpath(cmd[i], paths);
+		ft_get_cmdpath(cmd, cmd[i], paths);
 		i++;
 	}
 	cmd[i] = NULL;
@@ -125,7 +127,7 @@ void	ft_parse_file(int *fd, int fd_len, char **av, int here_doc)
 				O_CREAT | O_APPEND | O_WRONLY, 00644);
 	}
 	if (fd[0] == -1)
-		perror(av[1]);
+		ft_fprintf(2, "%s: %s\n", strerror(errno), av[1]);
 	if (fd[fd_len - 1] == -1)
-		perror(av[(fd_len / 2) + 2]);
+		ft_fprintf(2, "%s: %s\n", strerror(errno), av[(fd_len / 2) + 2]);
 }
